@@ -34,7 +34,7 @@ public class CoolWeatherDB {
 
     private static CoolWeatherDB coolWeatherDB;
 
-    public CoolWeatherDB(Context context) {
+    private CoolWeatherDB(Context context) {
         CoolWeatherOpenHelper helper = new CoolWeatherOpenHelper(context, DB_NAME, null, VERSION);
         db = helper.getWritableDatabase();
     }
@@ -57,7 +57,6 @@ public class CoolWeatherDB {
 
             values.put("province_name", province.getProvinceName());
             values.put("province_code", province.getProvinceCode());
-
             db.insert("Province", null, values);
         }
     }
