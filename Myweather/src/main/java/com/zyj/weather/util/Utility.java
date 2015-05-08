@@ -1,6 +1,7 @@
 package com.zyj.weather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.zyj.weather.db.CoolWeatherDB;
 import com.zyj.weather.model.City;
@@ -22,16 +23,21 @@ public class Utility {
      * @return
      */
     public synchronized static boolean handleProvinceResponse(CoolWeatherDB coolWeatherDB, String response) {
+        Log.i("Main","省份"+response);
         if (!TextUtils.isEmpty(response)) {
             String[] allProvince = response.split(",");
             if (allProvince != null && allProvince.length > 0) {
                 for (String p : allProvince) {
                     String[] array = p.split("\\|");
+                    for(int i=0; i<array.length; i++){
+
+                    }
                     Province province = new Province();
                     province.setProvinceCode(array[0]);
                     province.setProvinceName(array[1]);
 
                     coolWeatherDB.saveProvince(province);
+
                 }
                 return true;
             }

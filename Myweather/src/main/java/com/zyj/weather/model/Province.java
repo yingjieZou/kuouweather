@@ -9,18 +9,18 @@ public class Province {
     private String provinceCode;
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public String getProvinceCode() {
-        return provinceCode;
+        return this.provinceCode;
     }
 
     public String getProvinceName() {
-        return provinceName;
+        return this.provinceName;
     }
 
-    public void setProvinceCode(String getProvinceCode) {
+    public void setProvinceCode(String provinceCode) {
         this.provinceCode = provinceCode;
     }
 

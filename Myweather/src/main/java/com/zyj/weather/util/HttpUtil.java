@@ -9,8 +9,16 @@ import java.net.URL;
 /**
  * Created by zouyingjie on 15/5/5.
  */
-//联网操作的工具类
+
+/**
+ * 联网的工具类
+ */
 public class HttpUtil {
+    /**
+     * 请求旺网络获取数据
+     * @param address : 请求的网络地址
+     * @param listener : 请求完成之后的回调函数。保证了线程之间的通信
+     */
     public static void sendHttpRequest(final String address, final HttpCallbackListener listener) {
 
         new Thread(new Runnable() {
