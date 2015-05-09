@@ -2,6 +2,7 @@ package com.zyj.weather.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,15 +52,21 @@ public class ChooseAreaActivity extends Activity {
 
     private int currentLevel = 0;
 
-    @Override
-    protected void onStart() {
-        Toast.makeText(getApplicationContext(),"启动action",Toast.LENGTH_LONG).show();
-        super.onStart();
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       /* SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sp.getBoolean("city_selected",false)){
+            Intent intetn = new Intent(this,WeatherActivity.class);
+            startActivity(intetn);
+            finish();
+            return;
+
+        }*/
+
+
         Log.i("Main", "初始化");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.choose_area);
@@ -81,6 +88,16 @@ public class ChooseAreaActivity extends Activity {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if(currentLevel == LEVEL_COUNTY){
+
+                        String countyCode = countyList.get(position).getCountyCode();
+                        Log.i("Main","查询的县区"+countyCode);
+                        Intent intent = new Intent(ChooseAreaActivity.this,WeatherActivity.class);
+                        intent.putExtra("county_code",countyCode);
+                        startActivity(intent);
+                        finish();
+
+
                 }
             }
         });
