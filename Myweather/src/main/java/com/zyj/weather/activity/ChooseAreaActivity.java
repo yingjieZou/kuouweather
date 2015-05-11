@@ -3,7 +3,9 @@ package com.zyj.weather.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -52,19 +54,21 @@ public class ChooseAreaActivity extends Activity {
 
     private int currentLevel = 0;
 
+    private boolean isFromActivity;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sp.getBoolean("city_selected",false)){
-            Intent intetn = new Intent(this,WeatherActivity.class);
-            startActivity(intetn);
+        isFromActivity = getIntent().getBooleanExtra("from_weather_activity",false);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sp.getBoolean("city_selected",false) && !isFromActivity){
+            Intent intent = new Intent(this,WeatherActivity.class);
+            startActivity(intent);
             finish();
             return;
-
-        }*/
+        }
 
 
         Log.i("Main", "初始化");
@@ -258,6 +262,10 @@ public class ChooseAreaActivity extends Activity {
         }else if (currentLevel == LEVEL_CITY){
             queryProvince();
         }else{
+            if(isFromActivity){
+                Intent intent = new Intent(this,WeatherActivity.class);
+                startActivity(intent);
+            }
             finish();
         }
     }

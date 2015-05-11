@@ -8,10 +8,12 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zyj.weather.R;
+import com.zyj.weather.service.AutoUpateService;
 import com.zyj.weather.util.HttpCallbackListener;
 import com.zyj.weather.util.HttpUtil;
 import com.zyj.weather.util.Utility;
@@ -19,7 +21,7 @@ import com.zyj.weather.util.Utility;
 /**
  * Created by zouyingjie on 15/5/8.
  */
-public class WeatherActivity extends Activity{
+public class WeatherActivity extends Activity implements View.OnClickListener {
 
     private LinearLayout weatherInfoLayout;
     private TextView cityName;
@@ -28,6 +30,9 @@ public class WeatherActivity extends Activity{
     private TextView temp1;
     private TextView temp2;
     private TextView currentDate;
+
+    private Button switchCity;
+    private Button refreshWeather;
 
     String countyCode;
     @Override
@@ -44,7 +49,11 @@ public class WeatherActivity extends Activity{
         temp1 = (TextView) findViewById(R.id.temp1);
         temp2 = (TextView) findViewById(R.id.temp2);
         currentDate = (TextView) findViewById(R.id.tv_current_date);
+        switchCity = (Button) findViewById(R.id.switch_city);
+        refreshWeather = (Button) findViewById(R.id.refresh_weather);
 
+        switchCity.setOnClickListener(this);
+        refreshWeather.setOnClickListener(this);
 
         countyCode = getIntent().getStringExtra("county_code");
 
@@ -115,6 +124,9 @@ public class WeatherActivity extends Activity{
 
         weatherInfoLayout.setVisibility(View.VISIBLE);
         cityName.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, AutoUpateService.class);
+        startService(intent);
     }
 
     @Override
@@ -122,5 +134,27 @@ public class WeatherActivity extends Activity{
         Intent intent = new Intent(this,ChooseAreaActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.switch_city:
+                Intent intent = new Intent(this,ChooseAreaActivity.class);
+                intent.putExtra("from_weather_activity",true);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.refresh_weather:
+                publishTime.setText("同步中");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+                String weatherCode = sp.getString("weather_code","");
+                if(!TextUtils.isEmpty(weatherCode)){
+                    queryWeatherInfo(weatherCode);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
